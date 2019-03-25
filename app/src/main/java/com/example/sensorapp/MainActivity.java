@@ -10,6 +10,7 @@ import android.util.EventLog;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener,OnClickListener {
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView text;
     private Button button;
     private boolean running = false;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
 
         text = (TextView) findViewById(R.id.textView);
 
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_LIGHT){
             text.setText(""+event.values[0]);
+            progressBar.setProgress((event.values[0]/10000*100 > 100) ? 100 : (int) (event.values[0]/10000*100));
         }
     }
 
